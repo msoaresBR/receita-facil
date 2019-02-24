@@ -1,0 +1,152 @@
+swagger: "2.0"
+info:
+  description: Swagger file that goes with our server code
+  version: "1.0.0"
+  title: Swagger ReST Promocoes
+consumes:
+  - application/json
+produces:
+  - application/json
+
+basePath: /api
+
+paths:
+  /promocoes:
+    get:
+      operationId: promocoes.read_all
+      tags:
+        - Promocoes
+      summary: Lista de promocoes
+      description: Read Lista de Promocoes
+      parameters:
+        - name: length
+          in: query
+          type: integer
+          description: Number of Promocoes to get from Promocoes
+          required: false
+        - name: offset
+          in: query
+          type: integer
+          description: Offset from beginning of list where to start gathering Promocoes
+          required: false
+      responses:
+        200:
+          description: Successfully read Promocoes list operation
+          schema:
+            type: array
+            items:
+              properties:
+                farmacia:
+                  type: string
+                medicamento:
+                  type: string                  
+                descricao:
+                  type: string
+                link:
+                  type: string                  
+                dataInicio:
+                  type: string
+
+    post:
+      operationId: promocoes.create
+      tags:
+        - Promocoes
+      summary: Create a promocao and add it to the Promocoes list
+      description: Create a new promocao in the Promocoes list
+      parameters:
+        - name: promocao
+          in: body
+          description: Person to create
+          required: True
+          schema:
+            type: object
+            properties:
+              farmacia:
+                type: string
+                description: Farmacia
+              medicamento:
+                type: string
+                description: Medicamento em promocao
+              descricao:
+                type: string
+                description: Descricao da promocao
+              link:
+                type: string
+                description: link do site da farmacia para acessar a promocao 
+      responses:
+        201:
+          description: Successfully created promocao in list
+
+  /promocoes/{descricao}:
+    get:
+      operationId: promocoes.read_one
+      tags:
+        - Promocoes
+      summary: Read one promocao from the Promocoes list
+      description: Read one promocao from the Promocoes list
+      parameters:
+        - name: descricao
+          in: path
+          description: Descricao da promocao to get from the list
+          type: string
+          required: True
+      responses:
+        200:
+          description: Successfully read promocao from Promocoes list operation
+          schema:
+            properties:
+              farmacia:
+                type: string
+              medicamento:
+                type: string                
+              descricao:
+                type: string
+              link:
+                type: string                
+              dataInicio:
+                type: string
+
+    put:
+      operationId: promocoes.update
+      tags:
+        - Promocoes
+      summary: Update a promocao in the Promocoes list
+      description: Update a promocao in the Promocoes list
+      parameters:
+        - name: descricao
+          in: path
+          description: Descricao da promocao to update in the list
+          type: string
+          required: True
+        - name: promocao
+          in: body
+          schema:
+            type: object
+            properties:
+              farmacia:
+                type: string
+              medicamento:
+                type: string
+              descricao:
+                type: string
+              link:
+                type: string             
+      responses:
+        200:
+          description: Successfully updated promocao in Promocoes list
+
+    delete:
+      operationId: promocoes.delete
+      tags:
+        - Promocoes
+      summary: Delete a promocao from the Promocoes list
+      description: Delete a promocao
+      parameters:
+        - name: descricao
+          in: path
+          type: string
+          required: True
+      responses:
+        200:
+          description: Successfully deleted a promocao from Promocoes list
+
