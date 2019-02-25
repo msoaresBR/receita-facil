@@ -14,6 +14,7 @@
   <body>
     <div class="container">
       <h1>Receita F@cil - Promoções</h1>
+      <form id="slackform">
       <div class="section editor"> <label for="farmacia">Farmacia <input id="farmacia" class="form-control"
             type="text"> </label> <br>
             <label for="medicamento">Medicamento <input id="medicamento" class="form-control"
@@ -24,8 +25,8 @@
             type="text"> </label> <br>
         <button id="create" class="btn btn-primary">Incluir</button> <button id="reset" class="btn btn-info">Consultar</button>  <button id="update" class="btn btn-warning">Atualizar</button>
         <button id="delete" class="btn btn-danger">Excluir</button> 
-        <button id="enviar" class="btn btn-create">Enviar</button>
-        </div>
+        <input type="button" value="Enviar" onclick="postMSG()"/>
+        </div> </form>
       <br>
       <blockquote>
         <p>Clique duas vezes na descricao da promocao para editar.</p>
@@ -52,6 +53,54 @@
     <!-- Dependencias Bootstrap: jQuery.js, Popper.js, Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+// Definir a função postMSG(), conferir Canal e Webhook:
+  function postMSG(){
+    // get message to be posted
+    var msg = document.getElementById('descricao').value
+    // get target channel or team member
+    var chan = "#receita-facil"
+    // format payload for slack
+    var sdata = formatForSlack(msg, chan)
+    // log in console
+    console.log(sdata)
+    // post
+     $.ajax({
+       // url is what you get from activating the "Incoming WebHooks" slack integration
+       // if you leave, you should see an error message "No Team", status 404
+       url: 'https://hooks.slack.com/services/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',
+       type: 'POST',
+       processData: true,
+       data : sdata ,
+       success : function(data) {
+         // success will show on page
+         console.log(data)
+         $('#result').html(data);
+       },
+       error: function(data){
+         // error will show error object
+         console.log(data)
+         $('#result').html("error:"+JSON.stringify(data));
+      }
+     });
+  }
+</script>
+<script type="text/javascript">
+// Definir a função formatForSlack() que ajusta os dados:
+
+  function formatForSlack(msg, chan){
+    var payload ={
+      "channel":chan,
+      "username":'promocao',
+      "text": msg,
+      // https://www.webfx.com/tools/emoji-cheat-sheet/
+      "icon_emoji":':ghost:'
+    };
+    // return json string of payload
+    return JSON.stringify(payload)
+  }
+ </script>
 
   </body>
 </html>
