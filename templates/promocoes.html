@@ -25,7 +25,7 @@
             type="text"> </label> <br>
         <button id="create" class="btn btn-primary">Incluir</button> <button id="reset" class="btn btn-info">Consultar</button>  <button id="update" class="btn btn-warning">Atualizar</button>
         <button id="delete" class="btn btn-danger">Excluir</button> 
-        <input type="button" value="Enviar" onclick="postMSG()"/>
+        <input type="button" class="btn btn-secondary"  value="Enviar" onclick="postMSG()"/>
         </div> </form>
       <br>
       <blockquote>
@@ -58,11 +58,13 @@
 // Definir a função postMSG(), conferir Canal e Webhook:
   function postMSG(){
     // get message to be posted
-    var msg = document.getElementById('descricao').value
+    var msg = document.getElementById('descricao').value + " - Clique agora: " + document.getElementById('link').value
     // get target channel or team member
     var chan = "#receita-facil"
+    // get farmacia
+    var user = document.getElementById('farmacia').value
     // format payload for slack
-    var sdata = formatForSlack(msg, chan)
+    var sdata = formatForSlack(msg, chan, user)
     // log in console
     console.log(sdata)
     // post
@@ -89,13 +91,13 @@
 <script type="text/javascript">
 // Definir a função formatForSlack() que ajusta os dados:
 
-  function formatForSlack(msg, chan){
+  function formatForSlack(msg, chan, user){
     var payload ={
       "channel":chan,
-      "username":'promocao',
+      "username":user,
       "text": msg,
       // https://www.webfx.com/tools/emoji-cheat-sheet/
-      "icon_emoji":':ghost:'
+      "icon_emoji":':gift:'
     };
     // return json string of payload
     return JSON.stringify(payload)

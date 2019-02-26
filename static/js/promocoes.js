@@ -100,10 +100,14 @@ ns.view = (function() {
         reset: function() {
             $descricao.val('');
             $farmacia.val('').focus();
+            $medicamento.val('');
+            $link.val('');
         },
         update_editor: function(farmacia, medicamento, descricao, link) {
             $descricao.val(descricao);
             $farmacia.val(farmacia).focus();
+            $medicamento.val(medicamento);
+            $link.val(link);
         },
         build_table: function(promocoes) {
             let rows = ''
